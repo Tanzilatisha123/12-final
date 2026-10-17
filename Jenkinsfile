@@ -8,7 +8,7 @@ pipeline {
                     echo "Running Selenium Tests using pytest"
 
                     // Install Python dependencies
-                    bat 'pip install -r requirements.txt'
+                    bat '"C:\\Users\\Tanzila\\AppData\\Local\\Python\\bin\\python.exe" -m pip install -r requirements.txt'
 
                     //  Start Flask app in background
                     bat 'start /B python app.py'
