@@ -34,7 +34,7 @@ def test_short_password(setup_teardown):
     driver = setup_teardown
     driver.get("http://127.0.0.1:5001/")
 
-    driver.find_element(By.NAME, "username").send_keys("Jaya")
+    driver.find_element(By.NAME, "username").send_keys("Tanzila")
     driver.find_element(By.NAME, "pwd").send_keys("abc1")
     driver.find_element(By.NAME, "sb").click()
 
@@ -46,7 +46,7 @@ def test_valid_input(setup_teardown):
     driver = setup_teardown
     driver.get("http://127.0.0.1:5001/")
 
-    driver.find_element(By.NAME, "username").send_keys("Jaya")
+    driver.find_element(By.NAME, "username").send_keys("Tanzila")
     driver.find_element(By.NAME, "pwd").send_keys("abc123")
     driver.find_element(By.NAME, "sb").click()
 
@@ -55,4 +55,4 @@ def test_valid_input(setup_teardown):
     assert "/submit" in current_url, f"Expected redirect to success.html, but got: {current_url}"
 
     body_text = driver.find_element(By.TAG_NAME, "body").text
-    assert "Hello, Jaya! Welcome to the website" in body_text, f"Greeting not found or incorrect: {body_text}"
+    assert "Hello, Tanzila! Welcome to the website" in body_text, f"Greeting not found or incorrect: {body_text}"
