@@ -1,3 +1,4 @@
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -6,17 +7,30 @@ from webdriver_manager.chrome import ChromeDriverManager
 import pytest
 import time
 
+
 @pytest.fixture
 def setup_teardown():
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless=new")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
+
+    driver_path = ChromeDriverManager().install()
+    driver = webdriver.Chrome(
+        service=Service(driver_path),
+        options=options
+    )
+
     yield driver
     driver.quit()
+
 
 def get_alert_text(driver):
     alert = Alert(driver)
     text = alert.text
     alert.accept()
     return text
+
 
 def test_empty_username(setup_teardown):
     driver = setup_teardown
@@ -28,7 +42,9 @@ def test_empty_username(setup_teardown):
 
     time.sleep(1)
     alert_text = get_alert_text(driver)
+
     assert alert_text == "Username cannot be empty."
+
 
 def test_short_password(setup_teardown):
     driver = setup_teardown
@@ -40,7 +56,9 @@ def test_short_password(setup_teardown):
 
     time.sleep(1)
     alert_text = get_alert_text(driver)
+
     assert alert_text == "Password must be at least 6 characters long."
+
 
 def test_valid_input(setup_teardown):
     driver = setup_teardown
@@ -51,8 +69,13 @@ def test_valid_input(setup_teardown):
     driver.find_element(By.NAME, "sb").click()
 
     time.sleep(2)
+
     current_url = driver.current_url
-    assert "/submit" in current_url, f"Expected redirect to success.html, but got: {current_url}"
+    assert "/submit" in current_url, (
+        f"Expected redirect to success page, but got: {current_url}"
+    )
 
     body_text = driver.find_element(By.TAG_NAME, "body").text
-    assert "Hello, Tanzila! Welcome to the website" in body_text, f"Greeting not found or incorrect: {body_text}"
+    assert "Hello, Tanzila! Welcome to the website" in body_text, (
+        f"Greeting not found or incorrect: {body_text}"
+    )
